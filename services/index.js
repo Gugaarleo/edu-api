@@ -17,10 +17,10 @@ app.get('/token', (req, res) => {
 });
 
 app.get('/calc', (req, res) => {
-  const expr = req.query.expr || '2+2';
-  // Insecure eval
-  const result = eval(expr);
-  res.json({ result });
+ const expr = req.query.expr || '2+2';
+ // Não use eval; suporte apenas números e +,-,*,/
+ const safe = expr.match(/^[0-9+\-*/ ().]+$/) ? Function(`return ${expr}`)() : null;
+ res.json({ result: safe });
 });
 
 // Inicia o servidor
